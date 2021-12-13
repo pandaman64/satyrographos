@@ -29,8 +29,8 @@ depends: [
   "ppx_deriving"
   "ppx_deriving_yojson"
   "ocamlgraph"
-  "opam-format" {>= "2.0" & < "2.1"}
-  "opam-state" {>= "2.0" & < "2.1"}
+  "opam-format" {>= "2.0" & < "2.2"}
+  "opam-state" {>= "2.0" & < "2.2"}
   "re"
   "stringext" {with-test}
   "uri" {>= "3.0.0"}
