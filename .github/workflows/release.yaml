@@ -45,8 +45,7 @@ jobs:
       - name: Install Satyrographos
         if: ${{ ! matrix.oldest-dependencies }}
         run: |
-          opam install satyrographos --yes --with-doc
-          opam install satyrographos-snapshot-stable --yes --with-doc
+          opam install satyrographos-snapshot-stable --yes
 
       - name: Create snapshot tarball
         run: |
