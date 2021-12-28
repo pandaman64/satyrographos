@@ -40,6 +40,7 @@ jobs:
         run: |
           opam repository add satysfi-external https://github.com/gfngfn/satysfi-external-repo.git
           opam repository add satyrographos https://github.com/na4zagin3/satyrographos-repo.git
+          opam update
 
       - name: Install Satyrographos
         if: ${{ ! matrix.oldest-dependencies }}
