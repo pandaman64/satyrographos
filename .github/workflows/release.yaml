@@ -29,6 +29,7 @@ jobs:
         with:
           ocaml-compiler: ${{ matrix.ocaml-version }}
           dune-cache: true
+          opam-pin: false
 
           cache-prefix: "oldestdeps-${{ matrix.oldest-dependencies }}-satysfi-${{ matrix.with-satysfi }}"
 
@@ -45,10 +46,15 @@ jobs:
       - name: Install Satyrographos
         if: ${{ ! matrix.oldest-dependencies }}
         run: |
-          opam pin remove satyrographos
           opam install satyrographos-snapshot-stable --yes
 
       - name: Create snapshot tarball
         run: |
           opam exec -- satyrographos install --output dist --copy
-          tar cf satysfi-snapshot.tar.xz dist/
+          tar cf satysfi-snapshot-dist.tar.xz dist/
+
+      - name: Release snapshot tarball
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            satysfi-snapshot-dist.tar.xz
