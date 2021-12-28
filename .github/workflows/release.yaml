@@ -14,7 +14,7 @@ jobs:
         ocaml-version:
           - 4.12.1
         with-satysfi:
-          - false
+          - true
         oldest-dependencies:
           - false
     runs-on: ${{ matrix.os }}
@@ -42,11 +42,18 @@ jobs:
           opam repository add satysfi-external https://github.com/gfngfn/satysfi-external-repo.git
           opam repository add satyrographos https://github.com/na4zagin3/satyrographos-repo.git
 
+      - name: Install SATySFi
+        if: matrix.with-satysfi
+        run: |
+          # opam depext satysfi --yes --with-doc --with-test
+          # opam install satysfi --yes --with-doc --with-test
+          opam depext satysfi --yes
+          opam install satysfi --yes
+
       - name: Install Satyrographos
         if: ${{ ! matrix.oldest-dependencies }}
         run: |
-          opam install satyrographos --yes
-          opam install satysfi-dist
+          opam install satyrographos --yes --with-doc
 
       - name: Create snapshot tarball
         run: |
