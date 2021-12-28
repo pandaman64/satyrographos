@@ -46,6 +46,7 @@ jobs:
         if: ${{ ! matrix.oldest-dependencies }}
         run: |
           opam install satyrographos --yes
+          opam install satysfi-dist
 
       - name: Create snapshot tarball
         run: |
