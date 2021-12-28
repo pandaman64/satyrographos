@@ -42,13 +42,10 @@ jobs:
           opam repository add satyrographos https://github.com/na4zagin3/satyrographos-repo.git
           opam update
 
-      - name: Show opam pin
-        run: |
-          opam pin list
-
       - name: Install Satyrographos
         if: ${{ ! matrix.oldest-dependencies }}
         run: |
+          opam pin remove satyrographos
           opam install satyrographos-snapshot-stable --yes
 
       - name: Create snapshot tarball
