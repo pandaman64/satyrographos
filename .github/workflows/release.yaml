@@ -1,0 +1,53 @@
+name: Release-snapshot
+
+on:
+  - pull_request
+  - push
+
+jobs:
+  build:
+    name: Build
+    strategy:
+      matrix:
+        os:
+          - 'ubuntu-latest'
+        ocaml-version:
+          - 4.12.1
+        with-satysfi:
+          - false
+        oldest-dependencies:
+          - false
+    runs-on: ${{ matrix.os }}
+    env:
+      OPAMSOLVERTIMEOUT: 3600
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup OCaml ${{ matrix.ocaml-version }}
+        uses: ocaml/setup-ocaml@v2
+        with:
+          ocaml-compiler: ${{ matrix.ocaml-version }}
+          dune-cache: true
+
+          cache-prefix: "oldestdeps-${{ matrix.oldest-dependencies }}-satysfi-${{ matrix.with-satysfi }}"
+
+      - name: Check validity of the snapshot OPAM files
+        run: |
+          opam lint --strict *.opam
+
+      - name: Add SATySFi-related repos
+        if: matrix.with-satysfi
+        run: |
+          opam repository add satysfi-external https://github.com/gfngfn/satysfi-external-repo.git
+          opam repository add satyrographos https://github.com/na4zagin3/satyrographos-repo.git
+
+      - name: Install Satyrographos
+        if: ${{ ! matrix.oldest-dependencies }}
+        run: |
+          opam install satyrographos --yes
+
+      - name: Create snapshot tarball
+        run: |
+          opam exec -- satyrographos install dist --copy
+          tar cf satysfi-snapshot.tar.xz dist/
