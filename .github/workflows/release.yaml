@@ -52,8 +52,8 @@ jobs:
       - name: Create snapshot tarball
         run: |
           opam exec -- satyrographos install --output tarball/dist --copy
-          tar cf satysfi-snapshot-stable.tar.xz tarball/
-          tar cf satysfi-snapshot-stable.tar.zstd tarball/
+          tar acf satysfi-snapshot-stable.tar.xz tarball/
+          tar acf satysfi-snapshot-stable.tar.zstd tarball/
 
       - name: Publish tarball as workflow artifact
         uses: actions/upload-artifact@v2
