@@ -48,13 +48,23 @@ jobs:
         run: |
           opam install satyrographos-snapshot-stable --yes
 
+      # The tarball must contain dist/ directory rather than archiving dist/ directly
       - name: Create snapshot tarball
         run: |
-          opam exec -- satyrographos install --output dist --copy
-          tar cf satysfi-snapshot-dist.tar.xz dist/
+          opam exec -- satyrographos install --output tarball/dist --copy
+          tar cf satysfi-snapshot-stable.tar.xz tarball/
+          tar cf satysfi-snapshot-stable.tar.zstd tarball/
 
-      - name: Release snapshot tarball
-        uses: softprops/action-gh-release@v1
+      - name: Publish tarball as workflow artifact
+        uses: actions/upload-artifact@v2
         with:
-          files: |
-            satysfi-snapshot-dist.tar.xz
+          name: satysfi-snapshot-stable.tar.xz
+          path: |
+            satysfi-snapshot-stable.tar.xz
+
+      - name: Publish tarball as workflow artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: satysfi-snapshot-stable.tar.zstd
+          path: |
+            satysfi-snapshot-stable.tar.zstd
